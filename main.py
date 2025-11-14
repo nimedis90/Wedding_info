@@ -79,12 +79,16 @@ TRANSLATIONS = {
         'label_participation_wedding': "Will you be participating at the  Wedding Ceremony & Reception?",
         'label_participation_pre_wedding': "Will you be participating in the Pre-Wedding Event?",
         'label_participation_sleep_help': "Do you need assistance finding Accommodation?",
+        'label_dietary_preferences': "Dietary Preferences or Allergies (optional):",
+        'dietary_placeholder': "Please let us know about any dietary restrictions, allergies, or preferences...",
+        'label_music_preferences': "What song cannot be missing in our wedding?",
+        'music_placeholder': "Suggest a song, artist, or genre you'd like to hear at the wedding...",
         'option_yes': 'Yes',
         'option_no': 'No',
         'sleep_option_no': "No, I have or will find a place",
         'sleep_option_yes_both': "Yes, I need help finding a place for Thursday and Friday",
         'sleep_option_yes_thursday': "Yes, I need help finding a place for Thursday only",
-        'sleep_option_yes_friday': "Yes, I need help finding a place for Friday only",
+        'sleep_option_yes_friday': "Yes, I need help finding a place for Friday night",
         'button_submit': "Submit RSVP 🎉",
         'success_message': "Response Submitted Successfully! We can't wait to see you! ✅",
         'error_message': "Oops! Please enter both your First Name and Last Name before submitting.",
@@ -113,14 +117,18 @@ TRANSLATIONS = {
         'label_participation_wedding': "¿Asistirás a la Ceremonia y Recepción de la Boda?",
         'label_participation_pre_wedding': "¿Asistirás al Evento de Pre-Boda?",
         'label_participation_sleep_help': "¿Necesitas ayuda para encontrar Alojamiento?",
+        'label_dietary_preferences': "Preferencias Dietéticas o Alergias (opcional):",
+        'dietary_placeholder': "Por favor, infórmanos sobre cualquier restricción dietética, alergia o preferencia...",
+        'label_music_preferences': "Que canción no puede faltar en nuestra boda?",
+        'music_placeholder': "Sugiere una canción, artista o género que te gustaría escuchar en la boda...",
         'option_yes': 'Sí',
         'option_no': 'No',
         'sleep_option_no': "No, tengo o encontraré un lugar",
         'sleep_option_yes_both': "Sí, necesito ayuda para encontrar un lugar para el jueves y el viernes",
         'sleep_option_yes_thursday': "Sí, necesito ayuda para encontrar un lugar solo para el jueves",
-        'sleep_option_yes_friday': "Sí, necesito ayuda para encontrar un lugar solo para el viernes",
+        'sleep_option_yes_friday': "Sí, necesito ayuda para encontrar un lugar para el viernes",
         'button_submit': "Enviar RSVP 🎉",
-        'success_message': "¡Respuesta enviada con éxito! ¡Estamos ansiosos por verte! ✅",
+        'success_message': "¡Respuesta enviada con éxito! ¡Con muchas ganas de verte! ✅",
         'error_message': "¡Ups! Por favor, ingresa tu Nombre y Apellido antes de enviar.",
         'section_details': "Tus Detalles Confirmados",
         'output_name': "Nombre del Invitado:",
@@ -147,12 +155,16 @@ TRANSLATIONS = {
         'label_participation_wedding': "Parteciperai alla Cerimonia e Ricevimento del Matrimonio?",
         'label_participation_pre_wedding': "Parteciperai all'Evento Pre-Matrimonio?",
         'label_participation_sleep_help': "Hai bisogno di aiuto per trovare un Alloggio?",
+        'label_dietary_preferences': "Preferenze Alimentari o Allergie (opzionale):",
+        'dietary_placeholder': "Per favore, facci sapere di eventuali restrizioni dietetiche, allergie o preferenze...",
+        'label_music_preferences': "Quale canzone non può mancare al nostro matrimonio?",
+        'music_placeholder': "Suggerisci una canzone, artista o genere che vorresti sentire al matrimonio...",
         'option_yes': 'Sì',
         'option_no': 'No',
         'sleep_option_no': "No, ho o troverò un posto",
         'sleep_option_yes_both': "Sì, ho bisogno di aiuto per trovare un posto per giovedì e venerdì",
         'sleep_option_yes_thursday': "Sì, ho bisogno di aiuto per trovare un posto solo per giovedì",
-        'sleep_option_yes_friday': "Sì, ho bisogno di aiuto per trovare un posto solo per venerdì",
+        'sleep_option_yes_friday': "Sì, ho bisogno di aiuto per trovare un posto per venerdì",
         'button_submit': "Invia RSVP 🎉",
         'success_message': "Risposta inviata con successo! Non vediamo l'ora di vederti! ✅",
         'error_message': "Ops! Per favore, inserisci sia il tuo Nome che il tuo Cognome prima di inviare.",
@@ -298,6 +310,8 @@ def display_thank_you_page(T):
     participation_wedding_display = st.session_state.rsvp_wedding_display
     participation_pre_wedding_display = st.session_state.rsvp_pre_wedding_display
     sleep_help_display = st.session_state.rsvp_sleep_help_display
+    dietary_preferences = st.session_state.rsvp_dietary_preferences
+    music_preferences = st.session_state.rsvp_music_preferences
 
     st.balloons()
     
@@ -314,6 +328,16 @@ def display_thank_you_page(T):
     else:
         attendance_status = T['output_not_attending']
         status_emoji = "😢"
+    
+    # Build dietary preferences line if provided
+    dietary_line = ""
+    if dietary_preferences:
+        dietary_line = f"<p><strong>{T['label_dietary_preferences']}</strong>: {dietary_preferences}</p>"
+    
+    # Build music preferences line if provided
+    music_line = ""
+    if music_preferences:
+        music_line = f"<p><strong>{T['label_music_preferences']}</strong>: </p>"#{label_music_preferences: music_preferences}
         
     response_message = f"""
     <div style="padding: 20px; border-radius: 15px; border: 3px solid #FFC300; background-color: #FFF8E1; text-align: center;">
@@ -328,6 +352,8 @@ def display_thank_you_page(T):
         <p><strong>{T['label_participation_wedding']}</strong>: {participation_wedding_display}</p>
         <p><strong>{T['label_participation_pre_wedding']}</strong>: {participation_pre_wedding_display}</p>
         <p><strong>{T['label_participation_sleep_help']}</strong>: {sleep_help_display}</p>
+        {dietary_line}
+        {music_line}
     </div>
 
     <hr style="margin-top: 20px; margin-bottom: 20px;">
@@ -438,14 +464,14 @@ def main():
         participation_wedding_key = participation_options[participation_wedding_display]
 
         # Pre-Wedding Participation (in an expander)
-        with st.expander("Optional Events"): # This is separate from the event details in the sidebar
-            participation_pre_wedding_display = st.radio(
+#        with st.expander("Optional Events"): # This is separate from the event details in the sidebar
+        participation_pre_wedding_display = st.radio(
                 T['label_participation_pre_wedding'],
                 list(participation_options.keys()),
                 key='radio_pre_wedding',
                 horizontal=True
             )
-            participation_pre_wedding_key = participation_options[participation_pre_wedding_display] # Get key for sheet save
+        participation_pre_wedding_key = participation_options[participation_pre_wedding_display] # Get key for sheet save
 
         st.markdown("---")
         st.subheader("🛌 Accommodation")
@@ -454,7 +480,7 @@ def main():
         sleep_options_map = {
             T['sleep_option_no']: 'No',
             T['sleep_option_yes_both']: 'Yes - Thu & Fri',
-            T['sleep_option_yes_thursday']: 'Yes - Thu only',
+#            T['sleep_option_yes_thursday']: 'Yes - Thu only',
             T['sleep_option_yes_friday']: 'Yes - Fri only',
         }
         
@@ -465,6 +491,27 @@ def main():
         )
         sleep_help_key = sleep_options_map[sleep_help_display] # Get key for sheet save
 
+        st.markdown("---")
+        st.subheader("🍽️ Dietary Information")
+
+        # Dietary Preferences/Allergies
+        dietary_preferences = st.text_area(
+            T['label_dietary_preferences'],
+            placeholder=T['dietary_placeholder'],
+            key='dietary_preferences',
+            height=100
+        )
+
+        st.markdown("---")
+        st.subheader(f"🎵 {T['label_music_preferences']}")
+
+        # Music Playlist Suggestions
+        music_preferences = st.text_area(
+            T['label_music_preferences'],
+            placeholder=T['music_placeholder'],
+            key='music_preferences',
+            height=100
+        )
 
         # Submission Button inside the form
         st.markdown("---")
@@ -477,12 +524,19 @@ def main():
         if name and surname:
             
             # Data to save to Google Sheets (always send the key, not the display string)
+            # Use empty string if dietary preferences is None or empty
+            dietary_text = dietary_preferences.strip() if dietary_preferences else ""
+            # Use empty string if music preferences is None or empty
+            music_text = music_preferences.strip() if music_preferences else ""
+            
             data_to_save = [
                 name, 
                 surname, 
                 participation_wedding_key, 
                 participation_pre_wedding_key, 
-                sleep_help_key
+                sleep_help_key,
+                dietary_text,
+                music_text
             ]
             
             # Save data to Google Sheets
@@ -495,6 +549,8 @@ def main():
                 st.session_state.rsvp_wedding_display = participation_wedding_display
                 st.session_state.rsvp_pre_wedding_display = participation_pre_wedding_display
                 st.session_state.rsvp_sleep_help_display = sleep_help_display
+                st.session_state.rsvp_dietary_preferences = dietary_text
+                st.session_state.rsvp_music_preferences = music_text
                 
                 st.session_state.submitted = True
                 
